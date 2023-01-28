@@ -20,9 +20,8 @@ public class RandomWalk {
      * @param dy the distance he moves in the y direction
      */
     private void move(int dx, int dy) {
-        // FIXME do move by replacing the following code
-         throw new RuntimeException("Not implemented");
-        // END 
+    	x += dx;
+    	y += dy;
     }
 
     /**
@@ -31,8 +30,8 @@ public class RandomWalk {
      * @param m the number of steps the drunkard takes
      */
     private void randomWalk(int m) {
-        // FIXME
-        // END 
+        for(int i = 0; i < m; ++i) 
+        	randomMove();
     }
 
     /**
@@ -51,9 +50,7 @@ public class RandomWalk {
      * @return the (Euclidean) distance from the origin to the current position.
      */
     public double distance() {
-        // FIXME by replacing the following code
-         return 0.0;
-        // END 
+         return Math.sqrt((x * x) + (y * y));
     }
 
     /**
