@@ -4,6 +4,8 @@
 
 package edu.neu.coe.info6205.util;
 
+import edu.neu.coe.info6205.sort.elementary.InsertionSort;
+import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -125,4 +127,79 @@ public class Benchmark_Timer<T> implements Benchmark<T> {
     private final Consumer<T> fPost;
 
     final static LazyLogger logger = new LazyLogger(Benchmark_Timer.class);
+
+    public static void main(String[] args) {
+
+        int warmUps = 10;
+        InsertionSort<Integer> insertionSort = new InsertionSort<>();
+
+        //Initialize with 1000 random values
+        Integer[] warmupArr = new Integer[1000];
+        Random random = new Random();
+        for (int i = 0; i < warmupArr.length; i++) {
+            warmupArr[i] = random.nextInt();
+        }
+
+        //warmup the machine with the function to be timed
+        for(int i = 0; i < warmUps; i++) {
+            insertionSort.sort(warmupArr, 0, warmupArr.length);
+        }
+
+        //time insertion sort 5 times using doubling method
+        int n = 5000;
+        int m = 20;
+        for(int i = 0; i < 5; i++) {
+            int SIZE = n;
+            Consumer<Integer[]> consumer = array -> insertionSort.sort(array, 0, array.length);
+            Benchmark_Timer<Integer[]> timer = new Benchmark_Timer<>("Insertion sort benchmarking : ", consumer);
+
+            //Get a random ordered supplier
+            Supplier<Integer[]> randomOrderedArr = () -> {
+                Integer[] arr = new Integer[SIZE];
+                for(int j = 0; j < arr.length; j++) {
+                    arr[j] = random.nextInt();
+                }
+                return  arr;
+            };
+
+            //Get a sorted supplier
+            Supplier<Integer[]> sortedArr = () -> {
+                Integer[] arr = new Integer[SIZE];
+                for(int j = 0; j < arr.length; j++) {
+                    arr[j] = j;
+                }
+                return  arr;
+            };
+
+            //Get partially ordered supplier
+            Supplier<Integer[]> partiallyOrderedArr = () -> {
+                Integer[] arr = new Integer[SIZE];
+                for(int j = 0; j < (arr.length / 2); j++) {
+                    arr[j] = j;
+                }
+                for(int j = (arr.length / 2); j < arr.length; j++) {
+                    arr[j] = random.nextInt();
+                }
+                return  arr;
+            };
+
+            //Get reverse ordered supplier
+            Supplier<Integer[]> reverseOrderedArr = () -> {
+                Integer[] arr = new Integer[SIZE];
+                for(int j = 0; j < arr.length; j++) {
+                    arr[j] = SIZE - j;
+                }
+                return  arr;
+            };
+
+            System.out.println("N: " + n);
+            System.out.println("Random ordered: " + timer.runFromSupplier(randomOrderedArr, m));
+            System.out.println("Sorted already: " + timer.runFromSupplier(sortedArr, m));
+            System.out.println("Partially ordered: " + timer.runFromSupplier(partiallyOrderedArr, m));
+            System.out.println("Reverse ordered: " + timer.runFromSupplier(reverseOrderedArr, m));
+
+            //doubling method
+            n = n * 2;
+        }
+    }
 }
