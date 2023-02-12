@@ -21,7 +21,7 @@ public class HWQUPC_Solution {
     }
     public static void main(String[] args) {
         for(int n = 1; n < 100000; n *= 10) {
-            System.out.println("n = " + n + ", Number of connect(m) : " + count(n));
+            System.out.println("n = " + n + ", Number of connections(m) : " + count(n));
         }
     }
 }
