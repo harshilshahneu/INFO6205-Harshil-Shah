@@ -12,10 +12,10 @@ public class HWQUPC_Solution {
         while(uf_hwqupc.components() > 1) {
             int num1 = randomNumber.nextInt(n);
             int num2 = randomNumber.nextInt(n);
-            if(uf_hwqupc.connected(num1, num2)) {
+            if(!uf_hwqupc.connected(num1, num2)) {
                 uf_hwqupc.union(num1, num2);
-                count += 1;
             }
+            count += 1;
         }
         return count;
     }
