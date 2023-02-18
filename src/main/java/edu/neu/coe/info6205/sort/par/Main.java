@@ -22,15 +22,15 @@ public class Main {
         int n = 5000000;
         System.out.println("N: " + n);
 
-        for (int threads = 1; threads < 64; threads *= 2) {
+        for (int threads = 2; threads <= 64; threads *= 2) {
             ForkJoinPool fork = new ForkJoinPool(threads);
             System.out.println("Degree of parallelism: " + fork.getParallelism());
 //          System.out.println("Degree of parallelism: " + ForkJoinPool.getCommonPoolParallelism());
             Random random = new Random();
             int[] array = new int[n];
             ArrayList<Long> timeList = new ArrayList<>();
-            for (int j = 1; j < 100; j++) {
-                ParSort.cutoff = 10000 * (j + 1);
+            for (int j = 5; j <= 50; j+=5) {
+                ParSort.cutoff = 15000 * (j);
                 // for (int i = 0; i < array.length; i++) array[i] = random.nextInt(10000000);
                 long time;
                 long startTime = System.currentTimeMillis();
@@ -43,7 +43,7 @@ public class Main {
                 timeList.add(time);
 
 
-                System.out.println("cutoff：" + (ParSort.cutoff) + "\t\t10 times Time:" + time + "ms");
+                System.out.println("cutoff：\t" + (ParSort.cutoff) + "\t\t10 times Time:\t" + time + "\tms");
             }
             try {
                 FileOutputStream fis = new FileOutputStream("./src/result.csv");
